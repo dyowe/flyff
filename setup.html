@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flyff Private Server</title>
+    <!-- Bootstrap 5 + icons (light/dark toggle) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* custom monospace & code style */
+        body {
+            transition: background-color 0.2s, color 0.2s;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        pre, code, .config-value, .client-path {
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+        }
+
+        pre {
+            background-color: rgba(0,0,0,0.05);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        /* dark mode pre override via attribute */
+        [data-bs-theme="dark"] pre {
+            background-color: #1e1e1e;
+            border-color: #444;
+        }
+
+        .step-card {
+            border-left: 4px solid #0d6efd;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+            margin-bottom: 2rem;
+            transition: border-color 0.2s;
+        }
+
+        [data-bs-theme="dark"] .step-card {
+            border-left-color: #6ea8fe;
+            background-color: #1e1e1e;
+        }
+
+        .step-number {
+            font-weight: 600;
+            background-color: #0d6efd;
+            color: white;
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        [data-bs-theme="dark"] .step-number {
+            background-color: #0b5ed7;
+        }
+
+        .config-box {
+            background-color: #f8f9fa;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            border: 1px solid #dee2e6;
+        }
+
+        [data-bs-theme="dark"] .config-box {
+            background-color: #2b2b2b;
+            border-color: #444;
+        }
+
+        .config-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+        [data-bs-theme="dark"] .config-item {
+            border-bottom-color: #444;
+        }
+
+        .config-item:last-child {
+            border-bottom: none;
+        }
+
+        .config-label {
+            font-weight: 600;
+        }
+
+        .config-value {
+            background-color: #e9ecef;
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+        }
+
+        [data-bs-theme="dark"] .config-value {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+        }
+
+        .client-path {
+            background: #f1f3f4;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 500;
+        }
+
+        [data-bs-theme="dark"] .client-path {
+            background: #2d2d2d;
+        }
+
+        .ascii-art {
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-align: center;
+            color: #6c757d;
+            letter-spacing: 1px;
+        }
+
+        [data-bs-theme="dark"] .ascii-art {
+            color: #adb5bd;
+        }
+
+        footer {
+            border-top: 1px solid #dee2e6;
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        [data-bs-theme="dark"] footer {
+            border-top-color: #444;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            font-size: 0.95rem;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            transition: all 0.2s;
+        }
+
+        [data-bs-theme="dark"] .theme-toggle {
+            background-color: #2d2d2d;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .theme-toggle i {
+            margin-right: 0.4rem;
+        }
+
+        .btn-softether {
+            background-color: #198754;
+            color: white;
+            border-radius: 2rem;
+            padding: 0.3rem 1rem;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+            .btn-softether:hover {
+                background-color: #157347;
+                color: white;
+            }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <!-- top bar with theme toggle & logo -->
+    <div class="container mt-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <h1 class="display-5 fw-semibold"><i class="bi bi-star-fill text-primary me-2"></i>Flyff Private Server</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <i class="bi bi-sun-fill" id="themeIcon"></i> <span id="themeText">Light mode</span>
+            </button>
+        </div>
+        <p class="lead text-secondary">Step‑by‑step Guide</p>
+    </div>
+
+    <div class="container mt-4">
+        <!-- STEP 01 -->
+        <div class="step-card card border-0 bg-body-tertiary">
+            <div class="card-body">
+                <span class="step-number">STEP 01</span>
+                <h2 class="h4"><i class="bi bi-download me-2"></i>I-download at i-install ang SoftEther VPN Client</h2>
+                <ol class="mb-0">
+                    <li>I-download ang <strong><a href="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/download/v4.44-9807-rtm/softether-vpnclient-v4.44-9807-rtm-2025.04.16-windows-x86_x64-intel.exe" target="_blank" class="link-primary fw-semibold">SoftEther VPN Client</a></strong> <span class="badge bg-secondary">official stable</span></li>
+                    <li>Matapos mag-install, awtomatikong magbubukas ang <strong>VPN Client Manager</strong></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- STEP 02 -->
+        <div class="step-card card border-0 bg-body-tertiary">
+            <div class="card-body">
+                <span class="step-number">STEP 02</span>
+                <h2 class="h4"><i class="bi bi-hdd-network me-2"></i>Gumawa ng Virtual Network Adapter</h2>
+                <p>Sa unang pagbukas ng VPN Client Manager:</p>
+                <ol>
+                    <li>I-click ang <strong>"Add VPN Connection"</strong> na button</li>
+                    <li>May lalabas na prompt na mag-create ng <strong>Virtual Network Adapter</strong>, i-click ang <strong>"Yes"</strong></li>
+                    <li>Bigyan mo ng pangalan ang adapter (halimbawa: <strong>"VPN"</strong> o iwanan na lang ang default)</li>
+                </ol>
+                <pre class="mt-3 mb-0"><span class="text-success">✅ Virtual Network Adapter successfully created!</span></pre>
+            </div>
+        </div>
+
+        <!-- STEP 03 : config table + detailed settings -->
+        <div class="step-card card border-0 bg-body-tertiary">
+            <div class="card-body">
+                <span class="step-number">STEP 03</span>
+                <h2 class="h4"><i class="bi bi-sliders2 me-2"></i>I-configure ang VPN Connection Settings</h2>
+                <p>Gamitin ang iyong configuration details para i-setup ang connection:</p>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered align-middle">
+                        <thead class="table-primary">
+                            <tr><th>Setting</th><th>Value na Ilalagay</th><th>Paliwanag</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Connection Name</strong></td><td><code>FlyFF Server</code></td><td>Pangalan ng connection mo</td></tr>
+                            <tr><td><strong>Host Name</strong></td><td><code>flyff.vpnazure.net</code></td><td>Ito ang VPN Azure hostname mo</td></tr>
+                            <tr><td><strong>Port Number</strong></td><td><code>443</code></td><td>Default port ng VPN Azure</td></tr>
+                            <tr><td><strong>Virtual Hub Name</strong></td><td><code>VPN</code></td><td>Ang pangalan ng Virtual Hub mo</td></tr>
+                            <tr><td><strong>User Name</strong></td><td><code>flyff</code></td><td>Username na ginawa mo sa server</td></tr>
+                            <tr><td><strong>Password</strong></td><td><code>flyff</code></td><td>Password ng user na 'yun</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-warning d-flex" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                    <div>
+                        <strong>⚠️ Mga dapat tandaan habang nagse-setup:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li>Sa <strong>"Proxy Server for Relaying"</strong> field, piliin ang <strong>"Direct TCP/IP Connection"</strong></li>
+                            <li>Sa <strong>"Authentication Type"</strong>, piliin ang <strong>"Standard Password Authentication"</strong></li>
+                            <li>Ilagay ang <strong>User Name</strong> at <strong>Password</strong> na <code>flyff</code></li>
+                            <li>Sa <strong>"Virtual Network Adapter to Use"</strong>, piliin ang adapter na ginawa mo kanina</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 04 connection -->
+        <div class="step-card card border-0 bg-body-tertiary">
+            <div class="card-body">
+                <span class="step-number">STEP 04</span>
+                <h2 class="h4"><i class="bi bi-plug-fill me-2"></i>Kumonekta Na sa Server</h2>
+                <ol>
+                    <li>Sa main window ng VPN Client Manager, makikita mo ang bagong gawang connection na "FlyFF Server"</li>
+                    <li>I-right click ito at piliin ang <strong>"Connect"</strong> (o i-double click na lang ang connection)</li>
+                    <li>May lalabas na <strong>Connection Status</strong> window na magpapakita ng real-time status</li>
+                </ol>
+                <p><strong>Sundin ang connection process:</strong></p>
+                <pre>Starting Connection to VPN Server
+Negotiating...
+Authenticating User...
+<span class="text-success fw-bold">✅ Connection Established - SUCCESS!</span></pre>
+                <div class="alert alert-success d-flex mt-3">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span><strong>✅ Naka-connect ka na sa VPN server!</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 05 FlyFF client -->
+        <div class="step-card card border-0 bg-body-tertiary">
+            <div class="card-body">
+                <span class="step-number">STEP 05</span>
+                <h2 class="h4"><i class="bi bi-folder-symlink me-2"></i>I-install ang FlyFF Client</h2>
+                <div class="client-path mb-3">
+                    <i class="bi bi-hdd-stack-fill me-2"></i> <strong>C:\Client</strong>
+                </div>
+                <ol>
+                    <li>I-download <strong><a href="https://www.mediafire.com/file/2eqlotiasy7gkcs/Client.rar/file" target="_blank" class="link-primary">client.rar</a></strong> <span class="badge bg-secondary">MediaFire</span></li>
+                    <li><strong>I-extract</strong> sa <code>C:/</code> drive</li>
+                    <li><strong>Buksan</strong> ang client folder</li>
+                    <li><strong>Hanapin</strong> ang <code>★ flyff</code></li>
+                    <li><strong>Double click</strong> para maglaro!</li>
+                </ol>
+                <div class="alert alert-warning d-flex align-items-center">
+                    <i class="bi bi-exclamation-diamond-fill me-2 fs-5"></i>
+                    <span><strong>⚠️ IMPORTANTE:</strong> Siguraduhing nakaconnect ka sa VPN bago i-run ang FlyFF client! (Step 04)</span>
+                </div>
+                <pre class="mb-0">🎮 FlyFF client location: C:\Client</pre>
+            </div>
+        </div>
+
+        <!-- summary table + troubleshooting -->
+        <div class="row g-4 mt-2">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm bg-body-tertiary h-100">
+                    <div class="card-header bg-transparent fw-bold border-bottom"><i class="bi bi-card-list me-2"></i>📋 Buod ng Iyong Configuration</div>
+                    <div class="card-body">
+                        <table class="table table-sm table-borderless">
+                            <tbody>
+                                <tr><td><strong>VPN Azure Hostname</strong></td><td><code>flyff.vpnazure.net</code></td></tr>
+                                <tr><td><strong>Port</strong></td><td><code>443</code></td></tr>
+                                <tr><td><strong>Virtual Hub</strong></td><td><code>VPN</code></td></tr>
+                                <tr><td><strong>Username</strong></td><td><code>flyff</code></td></tr>
+                                <tr><td><strong>Password</strong></td><td><code>flyff</code></td></tr>
+                                <tr><td><strong>Auth Type</strong></td><td>Standard Password Authentication</td></tr>
+                                <tr><td><strong>FlyFF Client</strong></td><td><code>C:\Client</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm bg-body-tertiary h-100">
+                    <div class="card-header bg-transparent fw-bold border-bottom"><i class="bi bi-question-octagon me-2"></i>❓ Troubleshooting</div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-secondary">
+                                <tr><th>Error</th><th>Posibleng Dahilan</th><th>Solusyon</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>Authentication failed</strong></td><td>Maling username o password</td><td>I-double check na <code>flyff</code> ang username at password.</td></tr>
+                                <tr><td><strong>No response from server</strong></td><td>Port 443 na-block</td><td>Tiyaking pinapayagan ng Windows Firewall ang port 443</td></tr>
+                                <tr><td><strong>FlyFF client won't start</strong></td><td>Hindi naka-VPN or mali ang extraction path</td><td>Tiyaking naka-connect sa VPN at nasa <code>C:\Client\</code> ang client</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- mahalagang paalala (warning) -->
+        <div class="alert alert-warning mt-4 d-flex" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-3 fs-3"></i>
+            <div>
+                <strong>⚠️ Mahalagang Tandaan:</strong>
+                <ul class="mb-0 mt-2">
+                    <li><strong>VPN Azure ay relay service</strong>, kaya mas mabagal ito kumpara sa direct connection. Normal lang na may latency</li>
+                    <li>Ang VPN connection ay nagbibigay sa'yo ng access sa <strong>buong network</strong> ng server mo</li>
+                    <li><strong>I-connect muna ang VPN bago maglaro ng FlyFF!</strong></li>
+                    <li>Ang FlyFF client ay dapat naka-extract sa <code>C:\</code> drive para gumana nang maayos</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- success ready -->
+        <div class="alert alert-success d-flex align-items-center">
+            <i class="bi bi-rocket-takeoff-fill me-3 fs-3"></i>
+            <span><strong>🚀 Naka-setup na ang lahat! I-connect ang VPN at maglaro na ng FlyFF!</strong></span>
+        </div>
+
+        <footer>
+            <!-- ASCII art + footer -->
+            <div class="ascii-art my-4">
+                +-+-+-+-+-+ +-+-+-+-+-+-+-+ +-+-+-+-+-+-+<br>
+                |F|l|y|f|f| |P|r|i|v|a|t|e| |S|e|r|v|e|r|<br>
+                +-+-+-+-+-+ +-+-+-+-+-+-+-+ +-+-+-+-+-+-+
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS (not strictly needed but good for toggling) + theme toggle logic -->
+    <script>
+        (function() {
+        const toggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const htmlElement = document.documentElement;
+        const body = document.body;
+
+        function setTheme(theme) {
+        body.setAttribute('data-bs-theme', theme);
+        if (theme === 'dark') {
+        themeIcon.className = 'bi bi-moon-stars-fill';
+        themeText.innerText = 'Dark mode';
+        } else {
+        themeIcon.className = 'bi bi-sun-fill';
+        themeText.innerText = 'Light mode';
+        }
+        localStorage.setItem('flyffTheme', theme);
+        }
+
+        // initial load: check localStorage or prefer system?
+        const savedTheme = localStorage.getItem('flyffTheme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+        setTheme(savedTheme);
+        } else {
+        // optional: follow system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(prefersDark ? 'dark' : 'light');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+        const current = body.getAttribute('data-bs-theme') || 'light';
+        const newTheme = current === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        });
+        })();
+    </script>
+
+    <!-- optional Bootstrap bundle for extra components (not required for toggle) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
